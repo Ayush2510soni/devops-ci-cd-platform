@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        USER_SERVICE = "user-service"
+        PAYMENT_SERVICE = "payment-service"
+    }
+
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/Ayush2510soni/devops-ci-cd-platform.git'
+            }
+        }
+
+        stage('Build User Service') {
+            steps {
+                dir("microservices/${USER_SERVICE}") {
+                    sh 'docker build -t ${USER_SERVICE}:latest .'
+                }
+            }
+        }
+
+        stage('Build Payment Service') {
+            steps {
+                dir("microservices/${PAYMENT_SERVICE}") {
+                    sh 'docker build -t ${PAYMENT_SERVICE}:latest .'
+                }
+            }
+        }
+
+        stage('Run Containers (Optional)') {
+            steps {
+                sh 'docker run -d -p 5000:5000 user-service:latest'
+                sh 'docker run -d -p 5001:5001 payment-service:latest'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and deploy successful!'
+        }
+        failure {
+            echo '❌ Something went wrong.'
+        }
+    }
+}
+
