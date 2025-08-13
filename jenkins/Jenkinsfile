@@ -15,16 +15,16 @@ pipeline {
 
         stage('Build User Service') {
             steps {
-                dir("../microservices/${USER_SERVICE}") {
-                    sh 'docker build -t ${USER_SERVICE}:latest .'
+                dir("/microservices/${USER_SERVICE}") {
+                    sh "docker build -t ${USER_SERVICE}:latest ."
                 }
             }
         }
 
         stage('Build Payment Service') {
             steps {
-                dir("../microservices/${PAYMENT_SERVICE}") {
-                    sh 'docker build -t ${PAYMENT_SERVICE}:latest .'
+                dir("/microservices/${PAYMENT_SERVICE}") {
+                    sh "docker build -t ${PAYMENT_SERVICE}:latest ."
                 }
             }
         }
